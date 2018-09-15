@@ -2,8 +2,6 @@ import random
 import sys
 import time
 import math
-import numpy as np
-import pylab as plt
 
 k1 = 'EMUFPHZLRFAXYUSDJKZLDKRNSHGNFIVJYQTQUXQBQVYUVLLTREVJYQTMKYRDMFD'
 plaintext1 = 'BETWEENSUBTLESHADINGANDTHEABSENCEOFLIGHTLIESTHENUANCEOFIQLUSION'
@@ -112,9 +110,12 @@ def makefft(k4in, bcarray):
     return(ulout, fftprep)
 
 print("Starting at " + time.strftime('%X %x %Z') + "\n")
+sys.stdout.flush()
     
 #Only look at ratings of 8/11 or higher
 ratebest = 8
+#PLK test at 7
+#ratebest = 7
 snipbest = ""
 wordbest = ""
 
@@ -130,7 +131,7 @@ for i in range(0, 100000):
     posct = posct4
     groupit = ""
     
-    #Do a Vigenère translation based on K1 and K2 on the new random (scram) arrangement
+    #Do a Vigenere translation based on K1 and K2 on the new random (scram) arrangement
     for j in plaintext4:
         #print("j= " + j)
         alphpos = alph.find(j)
@@ -156,17 +157,18 @@ for i in range(0, 100000):
 
     #Test for a match of an English word
     #fin = open('short.txt')
-    fin = open('words.txt','r')
+    fin = open('words.txt')
 
-    for linein in fin:
+    for linein in iter(fin):
 
-        testin = linein
+        testin = fin.readline()
         testin = testin.strip()
         testin = testin.upper()
         #testin = "PALIMPSEST"
         #print(testin)
         
-        if len(testin) > 0:
+		#Only look at dictionary words of at least length 6 or greater
+        if len(testin) > 5:
             testline = ""
             testline = testline + testin + testin + testin + testin + testin
             testline = testline + testin + testin + testin + testin + testin
@@ -191,39 +193,42 @@ for i in range(0, 100000):
                 print("Word: " + wordbest)
                 print(scram)
                 #print(ctten)
+		sys.stdout.flush()
                 
-                longerarrout = arrout + [0,0,0]
-                N = len(longerarrout)
+                #longerarrout = arrout + [0,0,0]
+                #N = len(longerarrout)
                 #print("Len: " + str(N))
-                W = np.fft.fft(longerarrout)
-                freq = np.fft.fftfreq(N,1)
-                absW = abs(W)
-                absW[0] = 0
-                idx = absW.argmax(axis=0) 
-                idxval = (np.amax(absW)+1)
-                max_f = abs(freq[idx])
-                myest = int(round(1/max_f))
+                #W = np.fft.fft(longerarrout)
+                #freq = np.fft.fftfreq(N,1)
+                #absW = abs(W)
+                #absW[0] = 0
+                #idx = absW.argmax(axis=0) 
+                #idxval = (np.amax(absW)+1)
+                #max_f = abs(freq[idx])
+                #myest = int(round(1/max_f))
                 
                 #print("Period estimate: ", myest)
-                print("Period estimate: ", (1/max_f))
-                print("Strength: ", idxval)
-                print("")
+                #print("Period estimate: ", (1/max_f))
+                #print("Strength: ", idxval)
+                #print("")
                 
-                plt.subplot(211)
-                plt.scatter([max_f,], [np.abs(W[idx]),], s=100,color='r')
-                plt.plot(freq[:N/2], abs(W[:N/2]))
-                plt.xlabel(r"$f$")
+                #plt.subplot(211)
+                #plt.scatter([max_f,], [np.abs(W[idx]),], s=100,color='r')
+                #plt.plot(freq[:N/2], abs(W[:N/2]))
+                #plt.xlabel(r"$f$")
 
-                plt.subplot(212)
-                plt.plot(1.0/freq[:N/2], abs(W[:N/2]))
-                plt.scatter([1/max_f,], [np.abs(W[idx]),], s=100,color='r')
-                plt.xlabel(r"$1/f$")
-                plt.xlim(0,20)
+                #plt.subplot(212)
+                #plt.plot(1.0/freq[:N/2], abs(W[:N/2]))
+                #plt.scatter([1/max_f,], [np.abs(W[idx]),], s=100,color='r')
+                #plt.xlabel(r"$1/f$")
+                #plt.xlim(0,20)
 
-                plt.show()
+                #plt.show()
                 
     fin.close()          
     if ((i % 1000 == 0) and (i > 0)):
         print("Iteration: " + str(i) + " at " + time.strftime('%X %x %Z'))
+	sys.stdout.flush()
 
 print("Done at " + time.strftime('%X %x %Z'))
+sys.stdout.flush()
