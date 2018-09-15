@@ -70,7 +70,7 @@ for i in range(0, 100000):
     kout = ""
     posct = posct4
     
-    #Do a Vigenère translation based on K1 and K2 on the new random (scram) arrangement
+    #Do a VigenÃ¨re translation based on K1 and K2 on the new random (scram) arrangement
     for j in plaintext4:
         #print(j)
         alphpos = alph.find(j)
@@ -95,11 +95,11 @@ for i in range(0, 100000):
 
     #Test for a match of an English word
     #fin = open('short.txt')
-    fin = open('words.txt')
+    fin = open('words.txt','r')
 
-    for linein in iter(fin):
+    for linein in fin:
 
-        testin = fin.readline()
+        testin = linein
         testin = testin.strip()
         testin = testin.upper()
         #testin = "PALIMPSEST"
